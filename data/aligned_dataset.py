@@ -16,7 +16,7 @@ class AlignedDataset(BaseDataset):
         self.opt = opt
         self.root = opt.dataroot
         self.dir_AB = os.path.join(opt.dataroot, opt.phase)
-        self.AB_paths = sorted(make_dataset(self.dir_AB))
+        self.AB_paths = make_dataset(self.dir_AB)
         assert(opt.resize_or_crop == 'resize_and_crop')
 
     def __getitem__(self, index):
@@ -24,8 +24,9 @@ class AlignedDataset(BaseDataset):
         AB = Image.open(AB_path).convert('RGB')
         w, h = AB.size
         w2 = int(w / 2)
-        A = AB.crop((0, 0, w2, h)).resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
-        B = AB.crop((w2, 0, w, h)).resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
+
+        A = AB.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
+        B = AB.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
         A = transforms.ToTensor()(A)
         B = transforms.ToTensor()(B)
         w_offset = random.randint(0, max(0, self.opt.loadSize - self.opt.fineSize - 1))

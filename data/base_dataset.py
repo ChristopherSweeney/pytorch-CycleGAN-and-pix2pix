@@ -42,7 +42,7 @@ def get_transform(opt):
     else:
         raise ValueError('--resize_or_crop %s is not a valid option.' % opt.resize_or_crop)
 
-    if opt.isTrain and not opt.no_flip:
+    if False or opt.isTrain and not opt.no_flip:
         transform_list.append(transforms.RandomHorizontalFlip())
 
     transform_list += [transforms.ToTensor(),
